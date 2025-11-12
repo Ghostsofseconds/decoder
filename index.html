@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Adarsh Rajput | Portfolio</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins', sans-serif; }
+  body {
+    overflow:hidden;
+    background:black;
+    height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    position:relative;
+    color:#00ff00;
+    perspective:1000px;
+  }
+  canvas { position:absolute; top:0; left:0; z-index:0; }
+
+  .card {
+    position:relative;
+    z-index:2;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(10px);
+    border-radius:20px;
+    padding:30px;
+    width:360px;
+    text-align:center;
+    box-shadow:0 0 25px rgba(0,255,0,0.4);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    border:2px solid transparent;
+    animation: borderGlow 3s linear infinite;
+    color:white;
+  }
+  .card:hover {
+    transform: rotateY(8deg) rotateX(8deg) scale(1.05);
+    box-shadow: 0 0 40px rgba(0,255,0,0.7);
+  }
+  @keyframes borderGlow {
+    0% { border-color:#00ff00; box-shadow:0 0 15px #00ff00; }
+    50% { border-color:#00cc00; box-shadow:0 0 25px #00cc00; }
+    100% { border-color:#00ff00; box-shadow:0 0 15px #00ff00; }
+  }
+
+  .profile-pic {
+    width:150px;
+    height:150px;
+    border-radius:15px;
+    object-fit:cover;
+    margin-bottom:20px;
+    border:3px solid #00ff00;
+    animation: glow 2s infinite alternate;
+  }
+  @keyframes glow {
+    from { box-shadow:0 0 8px #00ff00; }
+    to { box-shadow:0 0 25px #00ff00; }
+  }
+
+  h1 { font-size:24px; margin-bottom:10px; letter-spacing:1px; color:#00ff00; }
+  p.bio {
+    font-size:14px; color:#d0f0a0; margin-bottom:20px; line-height:1.5;
+  }
+
+  .btns { display:flex; justify-content:center; gap:15px; flex-wrap:wrap; }
+  a {
+    display:inline-block;
+    text-decoration:none;
+    color:#00ff00;
+    border:1px solid #00ff00;
+    padding:10px 20px;
+    border-radius:8px;
+    transition: background 0.3s, color 0.3s, transform 0.3s;
+    font-size:14px;
+  }
+  a:hover { background:#00ff00; color:#000; transform:scale(1.05); }
+</style>
+</head>
+<body>
+
+<canvas id="bg"></canvas>
+
+<div class="card" id="tiltCard">
+  <img src="https://graph.org/file/8bcccbb33e82ffa6460ae-df2da11be2aa622c4e.jpg" alt="Adarsh Rajput" class="profile-pic" />
+  <h1>Adarsh Rajput</h1>
+  <p class="bio">I create interactive, animated websites with a focus on clean design and great user experience. Skilled in React, Tailwind, and Framer Motion. Passionate about modern web technologies and bringing ideas to life visually.</p>
+  <div class="btns">
+    <a href="https://github.com/Ghostsofseconds" target="_blank">GitHub</a>
+    <a href="https://wa.me/916201872651" target="_blank">Contact Me</a>
+  </div>
+</div>
+
+<script>
+// Matrix background effect
+const canvas = document.getElementById("bg");
+const ctx = canvas.getContext("2d");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+const letters = "アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズヅブプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポ0123456789";
+const fontSize = 16;
+const columns = Math.floor(canvas.width / fontSize);
+const drops = Array(columns).fill(1);
+
+function draw() {
+  ctx.fillStyle = "rgba(0,0,0,0.05)";
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle = "#0f0";
+  ctx.font = fontSize + "px monospace";
+
+  for(let i=0;i<drops.length;i++){
+    const text = letters[Math.floor(Math.random()*letters.length)];
+    ctx.fillText(text,i*fontSize,drops[i]*fontSize);
+    drops[i]++;
+    if(drops[i]*fontSize > canvas.height && Math.random() > 0.975){
+      drops[i] = 0;
+    }
+  }
+  requestAnimationFrame(draw);
+}
+draw();
+
+window.addEventListener("resize", () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
+
+// 3D tilt effect
+const card = document.getElementById("tiltCard");
+card.addEventListener("mousemove", (e) => {
+  const rect = card.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+  const rotateX = ((y/rect.height)-0.5)*20;
+  const rotateY = ((x/rect.width)-0.5)*-20;
+  card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
+});
+card.addEventListener("mouseleave", () => {
+  card.style.transform = `rotateX(0deg) rotateY(0deg) scale(1)`;
+});
+</script>
+
+</body>
+</html>
